@@ -10,36 +10,36 @@ class Spear {
         this.player = options.player;
         this.color = options.color;
         this.isMoving = false;
-        this.isPlayerHolding = true;
+        this.isPlayerHolding = false;
         this.clickPos = [0, 0];
         this.checkClick = false;
-        document.addEventListener('click', function (e) {
-            let canvasBounds = canvas.getBoundingClientRect();
-            let clickX = e.pageX - canvasBounds.left;
-            let clickY = e.pageY - canvasBounds.top;
-            this.clickPos = [clickX, clickY];
-            console.log(this.clickPos);
-            this.checkClick = true;
-        });
+        // document.addEventListener('click', function (e) {
+        //     let canvasBounds = canvas.getBoundingClientRect();
+        //     let clickX = e.pageX - canvasBounds.left;
+        //     let clickY = e.pageY - canvasBounds.top;
+        //     this.clickPos = [clickX, clickY];
+        //     console.log(this.clickPos);
+        //     this.checkClick = true;
+        // });
 
-        requestAnimationFrame(this.update.bind(this));
+        //requestAnimationFrame(this.update.bind(this));
     }
-    clickedOn(clickPos) {
-        console.log(clickPos);
-    }
+    // clickedOn(clickPos) {
+    //     console.log(clickPos);
+    // }
     draw() {
         this.ctx.fillStyle = this.color;
         this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
     }
-    update(time) {
-        if (this.isPlayerHolding) {
-            this.playerHolding();
-        }
-        if (this.checkClick) { 
+    // update(time) {
+    //     if (this.isPlayerHolding) {
+    //         this.playerHolding();
+    //     }
+    //     if (this.checkClick) { 
             
-        }
-        requestAnimationFrame(this.update.bind(this));
-    }
+    //     }
+    //     requestAnimationFrame(this.update.bind(this));
+    // }
     playerHolding() {
 
         let dist = this.distanceFrom(this.player.pos);
@@ -61,7 +61,7 @@ class Spear {
         let moveX = pos[0] - this.pos[0] - this.width / 2;
         let moveY = pos[1] - this.pos[1] - this.height / 2;
 
-        if (Math.abs(moveX) < 1 && Math.abs(moveY) < 1) {
+        if (Math.abs(moveX) < 3 && Math.abs(moveY) < 3) {
             this.isMoving = false;
             return;
         }

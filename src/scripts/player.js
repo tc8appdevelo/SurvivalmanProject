@@ -1,6 +1,8 @@
 const Game = require("./game.js");
 const Spear = require("./spear.js");
 const Water = require("./water.js");
+const Food = require("./food.js");
+
 // class Player 
 class Player {
     constructor(options) {
@@ -11,6 +13,13 @@ class Player {
         this.width = options.width;
         this.height = options.height;
         this.color = options.color;
+        this.holdingPosition = [this.pos[0] - 22, (this.pos[1] + this.height/2)];
+
+        this.clickedOn = [];
+        this.holding = [];
+        this.isHolding = false;
+
+        console.log(this.holding);
 
         this.isMoving = false;
         this.isDrinking = false;
@@ -21,19 +30,45 @@ class Player {
         this.bodyTemp = 100;
 
         this.setUpHtmlTexts();
-        // this.hydrationText = document.getElementById("hydration-text");
-        // this.caloriesText = document.getElementById("calories-text");
-        // this.tempText = document.getElementById("temp-text");
-        // this.hydrationText.innerHTML = `Hydration: ${this.hydration}`;
-        // this.caloriesText.innerHTML = `Calories: ${this.calories}`;
-        // this.tempText.innerHTML = `Temp: ${this.bodyTemp}`;
         
         setInterval(this.incrementHydration.bind(this), 2000);
         setInterval(this.incrementCalories.bind(this), 2000);
         //setInterval(this.incrementBodyTemp.bind(this), 2000);
+        addEventListener('keydown', this.keyDownListener.bind(this));
+        requestAnimationFrame(this.playerUpdate.bind(this));
     }
-    
 
+
+
+
+
+    playerUpdate() {
+        this.playerHolding();
+        requestAnimationFrame(this.playerUpdate.bind(this));
+    }
+
+    playerHolding() {
+        //console.log(this.holding);
+        if (this.holding.length > 0) {
+            let h = this.holding[0];
+            let dist = Math.hypot(this.pos[0] - h.pos[0], this.pos[1] - h.pos[1]);
+            if (dist > 2) {
+                h.pos = [this.pos[0] - h.width / 2, this.pos[1] + this.height / 2];
+            }
+        }
+    }
+
+    dropItem() {
+        if (this.holding.length > 0)
+            this.holding.shift()
+    }
+
+
+    keyDownListener(event) {
+        if (event.keyCode == 69 && this.holding instanceof Food) {
+            this.eatFood(this.holding);
+        }
+    }
 
     incrementHydration() {
         if (!this.isDrinking) {
@@ -106,23 +141,28 @@ class Player {
         this.tempText.innerHTML = `Temp: ${this.bodyTemp}`;
     }
 
+    eatFood(food) {
+        console.log("eating food!");
+        this.calories += food.calories;
+    }
+
 
     // I think if its a circle colliding you just have to
     // check if adding the radius or subtracting it from its pos
     // will result in a point that touches the square.
     // probably some way to detect a range easier than writing
     // a bunch more if statements.
-    collisionFromPoint(pos) {
-        let isCollision = false;
-        let x = pos[0];
-        let y = pos[1];
+    // collisionFromPoint(pos) {
+    //     let isCollision = false;
+    //     let x = pos[0];
+    //     let y = pos[1];
 
-        if ((x >= this.x && x <= this.x + this.width)
-            && (y >= this.y && y <= this.y + this.height)) {
-            isCollision = true;
-        }
-        return isCollision;
-    }
+    //     if ((x >= this.x && x <= this.x + this.width)
+    //         && (y >= this.y && y <= this.y + this.height)) {
+    //         isCollision = true;
+    //     }
+    //     return isCollision;
+    // }
 
     collisionDetection() {
         let x = this.middlePosition()[0];
