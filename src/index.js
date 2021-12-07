@@ -1,7 +1,9 @@
 const Game = require("./scripts/game.js")
 const Player = require("./scripts/player.js");
+const Boar = require("./scripts/boar.js");
 const Spear = require("./scripts/spear.js");
 const Water = require("./scripts/water.js");
+const Fire = require("./scripts/fire.js");
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOM loaded");

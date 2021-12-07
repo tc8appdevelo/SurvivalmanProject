@@ -13,20 +13,9 @@ class Spear {
         this.isPlayerHolding = false;
         this.clickPos = [0, 0];
         this.checkClick = false;
-        // document.addEventListener('click', function (e) {
-        //     let canvasBounds = canvas.getBoundingClientRect();
-        //     let clickX = e.pageX - canvasBounds.left;
-        //     let clickY = e.pageY - canvasBounds.top;
-        //     this.clickPos = [clickX, clickY];
-        //     console.log(this.clickPos);
-        //     this.checkClick = true;
-        // });
 
-        //requestAnimationFrame(this.update.bind(this));
     }
-    // clickedOn(clickPos) {
-    //     console.log(clickPos);
-    // }
+    
     draw() {
         this.ctx.fillStyle = this.color;
         this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
@@ -42,15 +31,15 @@ class Spear {
     // }
     playerHolding() {
 
-        let dist = this.distanceFrom(this.player.pos);
+        let dist = this.distanceFrom(this.player);
 
         if (dist > 2) {
             this.pos = [this.player.pos[0] - this.width / 2, this.player.pos[1] + this.player.height / 2];
         }
 
     }
-    distanceFrom() {
-        let pos = [this.player.pos[0] - this.width / 2, this.player.pos[1] + this.player.height / 2];
+    distanceFrom(obj) {
+        let pos = [obj.pos[0] - this.width / 2, obj.pos[1] + obj.height / 2];
         let x = pos[0] - this.pos[0];
         let y = pos[1] - this.pos[1];
         let distance = (Math.sqrt(x * x + y * y));

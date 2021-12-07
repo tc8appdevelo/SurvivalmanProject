@@ -1,8 +1,12 @@
 const Player = require("./player.js");
+const Fire = require("./fire.js");
+const Tree = require("./tree.js");
 const Water = require("./water.js");
 const Food = require("./food.js");
 const Spear = require("./spear.js");
-// setInterval
+const Boar = require("./boar.js");
+const PorkChop = require("./pork_chop.js");
+
 let clickedMoveNeeded = false;
 let spearThrowPressed = false;
 let isPlayerHolding;
@@ -15,9 +19,14 @@ class Game {
 
         this.canvas = document.querySelector('canvas');
         this.ctx = ctx;
+
+        this.boars = [];
         this.waters = [];
         this.foods = [];
+        this.wood = [];
         this.spears = [];
+
+        this.fire = new Fire([40,40], [30,20], [20,40], this.ctx);
 
         document.addEventListener('keydown', keyDownHandler, false);
         document.addEventListener('keyup', keyUpHandler, false);
@@ -29,14 +38,15 @@ class Game {
         this.spear = this.createSpear([222, 222], this.ctx);
 
         const water = new Water({ pos: [333, 111], radius: 55, ctx: this.ctx });
-        this.waters.push(water);
-
-        this.spawnFoods(5);
-
         this.lastUpdateTime = 0;
-        //isPlayerHolding = this.spear.isPlayerHolding;
-        //onsole.log(isPlayerHolding);
+        this.waters.push(water);
+        this.spawnFoods(5);
+        //this.spawnBoars();
+        let boar = new Boar(this, this.ctx);
+        this.boars.push(boar);
+        console.log(this.boars);
         this.drawGame();
+
         requestAnimationFrame(this.myUpdate.bind(this));
     }
 
@@ -48,8 +58,26 @@ class Game {
         for (let i = 0; i < this.foods.length; i++) {
             this.foods[i].draw();
         }
+        for (let i = 0; i < this.boars.length; i++) {
+            this.boars[i].draw();
+
+        }
+
         this.player.draw();
+        if (this.player.holding.length > 0) {
+            this.player.holding.forEach(function(e) {
+                e.draw();
+            });
+        }
+        this.fire.draw();
         this.spear.draw();
+    }
+
+    spawnBoars() {
+        setInterval(() => {
+            let boar = new Boar(this, this.ctx);
+            this.boars.push(boar);
+        }, 3000);
     }
 
     createFood(pos) {
@@ -104,17 +132,18 @@ class Game {
         const deltaTime = (time - this.lastUpdateTime) / 100;
         this.lastUpdateTime = time;
 
+        for (let i = 0; i < this.boars.length; i++) {
+            this.boars[i].move(deltaTime);
+        }
+
         if (this.spear.isMoving && !spearClickMoveNeeded) {
             this.spearClickMove(newSpearPosition, deltaTime);
         }
-        console.log(this.player.holding[0] === this.spear);
+
         if (spearClickMoveNeeded) {
-            //this.player.holding.shift();
             spearClickMoveNeeded = false;
             this.spear.isMoving = true;
             this.spear.isPlayerHolding = false;
-            // this.spear.isPlayerHolding = false;
-            // this.player.isHolding = false;
             this.spearClickMove(newSpearPosition, deltaTime);
         }
 
@@ -129,6 +158,9 @@ class Game {
         }
 
         this.player.collisionDetection();
+        this.collisionDetection();
+
+        this.drawGame();
 
         if (time < 100000) {
             requestAnimationFrame(this.myUpdate.bind(this));
@@ -142,20 +174,29 @@ class Game {
         let x = this.player.middlePosition()[0];
         let y = this.player.middlePosition()[1];
 
-        for (let i = 0; i < this.waters.length; i++) {
-            let w = this.waters[i];
-            let distance = Math.sqrt(Math.pow(x - w.pos[0], 2) + Math.pow(y - w.pos[1], 2));
-
-            if (distance <= (w.radius + this.player.width / 2))
-                console.log(`player drinking water: ${distance}`);
-            return (distance <= (w.radius + this.player.width / 2));
+        for (let i = 0; i < this.boars.length; i++) {
+            console.log("boar ")
+            let b = this.boars[i];
+            let s = this.spear;
+            let dist = Math.sqrt(Math.pow(s.pos[0]-b.pos[0], 2) + Math.pow(s.pos[1]-b.pos[1], 2));
+            console.log(`boar spear dist: ${dist}`);
+            if (dist <= (b.width/2 + s.width/2)) {
+                let x = b.pos[0];
+                let y = b.pos[1];
+                let pos = [x,y];
+                console.log(`boars length: ${this.boars.length}`);
+                this.boars.splice(i, 1);
+                console.log(`boars length: ${this.boars.length}`);
+            }
         }
+
     }
 
     mouseClickMove(pos, dt) {
         this.player.moveTo(pos, dt);
         this.drawGame();
     }
+
     spearClickMove(pos, dt) {
         this.spear.move(pos, dt);
         this.drawGame();
@@ -163,6 +204,7 @@ class Game {
 
     mouseDownHandler(event) {
         this.player.clickedOn = -1;
+
         let canvasBounds = canvas.getBoundingClientRect();
         let clickX = event.pageX - canvasBounds.left;
         let clickY = event.pageY - canvasBounds.top;
@@ -173,8 +215,7 @@ class Game {
             console.log(this.player.distanceFrom(this.player.clickedOn));
             this.player.distanceFrom(this.player.clickedOn);
         }
-        
-        
+
         if (!spearThrowPressed) {
             clickedMoveNeeded = true;
             newPosition = [clickX, clickY];
@@ -184,74 +225,38 @@ class Game {
             spearClickMoveNeeded = true;
             newSpearPosition = [clickX, clickY];
         }
-    
     }
 
     checkClickedOn(pos) {
-
         let x = pos[0];
         let y = pos[1];
         let playerPos = this.player.middlePosition();
         for (let i = 0; i < this.foods.length; i++) {
             let food = this.foods[i];
-            if (((x >= food.pos[0]) && x <= (food.pos[0] + food.width)) && ((y >= food.pos[1]) && y <= (food.pos[1] + food.height))) {
-
-                console.log(`Clicked on food: ${food}`);
-                
-                //console.log(playerPos);
+            if (((x >= food.pos[0]) && x <= (food.pos[0] + food.width)) && 
+                ((y >= food.pos[1]) && y <= (food.pos[1] + food.height))) {
                 const distance = Math.sqrt(Math.pow(food.pos[0] - playerPos[0], 2) + 
                                             Math.pow(food.pos[1] - playerPos[1], 2));
-                //console.log(distance);
-                //this.player.clickedOn = food;
                 if (distance <= this.player.width*2) {
-                    this.player.holding = [];
-                    this.player.holding.push(food); 
+                    this.player.pickUpItem(food);
+                    this.foods.splice(i, 1);
                 }
                 return food;
             }
         }
-        if (((x >= this.spear.pos[0]) && x <= (this.spear.pos[0] + this.spear.width)) && ((y >= this.spear.pos[1]) && y <= (this.spear.pos[1] + this.spear.height))) {
+        if (((x >= this.spear.pos[0]) && x <= (this.spear.pos[0] + this.spear.width)) 
+            && ((y >= this.spear.pos[1]) && y <= (this.spear.pos[1] + this.spear.height))) {
             const distance = Math.sqrt(Math.pow(this.spear.pos[0] - playerPos[0], 2) + 
                                             Math.pow(this.spear.pos[1] - playerPos[1], 2));
-            console.log(distance);
             if (distance <= this.player.width) {
-                console.log("hit spear and close")
-                if (this.player.holding.length > 0) {
-                    this.player.holding = [];
-                }
-                this.player.holding.push(this.spear);
+                this.player.pickUpItem(this.spear);
+                
             }
         }
-        //return false;
+        
     }
 
 }
-
-
-
-
-
-
-// function mouseDownHandler(event) {
-//     let canvasBounds = canvas.getBoundingClientRect();
-//     let clickX = event.pageX - canvasBounds.left;
-//     let clickY = event.pageY - canvasBounds.top;
-
-//     // console.log("mouse down");
-//     // console.log("X: " + clickX + "  Y: " + clickY);
-
-
-
-//     if (!spearThrowPressed) {
-//         clickedMoveNeeded = true;
-//         newPosition = [clickX, clickY];
-//     } else if (isPlayerHolding){
-//         isPlayerHolding = false;
-//         spearClickMoveNeeded = true;
-//         newSpearPosition = [clickX, clickY];
-//     }
-
-// }
 
 
 function keyDownHandler(event) {
@@ -272,10 +277,7 @@ function keyDownHandler(event) {
         upPressed = true;
     }
 }
-// minigame part to make not only throwing spear at something for food,
-// can knock down fruit or coconuts from trees with same motion
-// as the click and drag bow and arrow or spear throw motion
-// could be a boomerang or a spear shoots like that old web bow game.
+
 function keyUpHandler(event) {
     if (event.keyCode == 32) {
         spearThrowPressed = false;
@@ -294,28 +296,7 @@ function keyUpHandler(event) {
         upPressed = false;
     }
 }
-// Game.prototype.moveIfKeyDown = function moveIfKeyDown(dt) {
-//     if (rightPressed === true) {
-//         this.ctx.clearRect(0, 0, 800, 800);
-//         this.player.move(dt, [1,0]);
-//         this.player.draw(this.ctx);
-//     }
-//     if (leftPressed === true) {
-//         this.ctx.clearRect(0, 0, 800, 800);
-//         this.player.move(dt, [-1, 0]);
-//         this.player.draw(this.ctx);
-//     }
-//     if (upPressed === true) {
-//         this.ctx.clearRect(0, 0, 800, 800);
-//         this.player.move(dt, [0, -1]);
-//         this.player.draw(this.ctx);
-//     }
-//     if (downPressed === true) {
-//         this.ctx.clearRect(0, 0, 800, 800);
-//         this.player.move(dt, [0, 1]);
-//         this.player.draw(this.ctx);
-//     }
-// }
+
 
 module.exports = Game;
 

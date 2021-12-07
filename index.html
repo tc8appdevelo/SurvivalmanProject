@@ -11,7 +11,12 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="800" height="500" style='border: 1px solid;'></canvas>
+    <!-- <canvas id="canvas" width="800" height="500" 
+        style='border: 1px solid; position: fixed; left: 0; right: 0;'></canvas> -->
+
+    <div style="max-height: 700px;max-width:1000px;overflow: scroll;">
+            <canvas id = "canvas" width="800px" height="600px"></canvas>
+    </div> 
     <h3 id="hydration-text">Hydration: </h3>
     <h3 id="calories-text">Calories: </h3>
     <h3 id="temp-text">Temp: </h3>

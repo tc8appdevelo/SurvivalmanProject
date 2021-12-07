@@ -58,15 +58,28 @@ class Player {
         }
     }
 
+    pickUpItem(item) {
+        if (this.holding.length > 0) {
+            this.dropItem();
+        }
+        this.holding.push(item);
+    }
+
     dropItem() {
-        if (this.holding.length > 0)
-            this.holding.shift()
+        if (this.holding.length > 0) {
+            if (this.holding[0] instanceof Food) {
+                console.log("instanceof works");
+                this.game.foods.push(this.holding[0]);
+            }
+        }
+        this.holding.shift()
     }
 
 
     keyDownListener(event) {
-        if (event.keyCode == 69 && this.holding instanceof Food) {
-            this.eatFood(this.holding);
+        if (event.keyCode == 69 && this.holding[0] instanceof Food) {
+            console.log("eating food");
+            this.eatFood();
         }
     }
 
@@ -141,9 +154,13 @@ class Player {
         this.tempText.innerHTML = `Temp: ${this.bodyTemp}`;
     }
 
-    eatFood(food) {
+    eatFood() {
         console.log("eating food!");
-        this.calories += food.calories;
+        this.calories += this.holding[0].calories;
+        this.setUpHtmlTexts();
+        this.holding.shift();
+        this.game.drawGame();
+        console.log(this.holding);
     }
 
 
