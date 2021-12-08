@@ -4,12 +4,25 @@ class BoarMeat {
     constructor(ctx, pos) {
         this.ctx = ctx;
         this.pos = pos;
-        this.width = 16;
-        this.height = 22;
-        this.color = 'LightCoral';
         this.isCooked = false;
         this.calories = 1000;
+        this.width = 44;
+        this.height = 22;
+        this.color = "Coral";
+        this.image = new Image();
+        // this.image.src = '../boar_meat_raw.png';
+        // this.width = this.image.width;
+        // this.height = this.image.height;
+        // this.draw();
     }
+
+    // draw() {
+    //     this.ctx.drawImage(this.image, 0, 0,
+    //         this.width, this.height, this.pos[0], this.pos[1],
+    //         this.width, this.height);
+    //         // this.ctx.fillStyle = 'blue';
+    //         // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    // }
 
     draw() {
         this.ctx.fillStyle = this.color;

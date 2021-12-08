@@ -6,56 +6,32 @@ class Fire {
     constructor(ctx, pos) {
         this.ctx = ctx;
         this.pos = pos;
-        this.b = [40, -80];
-        this.c = [80, 0];
-
-        this.colorIdx = 0;
-
-        this.colorArray = ['33ccff','#ff0000', '#ff0d00', '#ff1a00', '#ff2600', '#ff3300', '#ff4000'];
-
-        this.color = 'Yellow';
-
-        // requestAnimationFrame(this.animateFire.bind(this));
+        this.fireImage = new Image();
+        this.fireImage.src = "../Fire.png";
+        this.width = this.fireImage.width;
+        this.height = this.fireImage.height;
     }
     draw() {
-        let x = this.pos[0];
-        let y = this.pos[1];
+        this.ctx.drawImage(this.fireImage, 0, 0,
+            this.width, this.height, this.pos[0], this.pos[1],
+            this.width, this.height);
 
-        this.ctx.beginPath();
         
-        this.ctx.moveTo(this.pos[0], this.pos[1]);
-        this.ctx.lineTo(this.b[0]+x, this.b[1]+y);
-        this.ctx.lineTo(this.c[0]+x, this.c[1]+y);
-        this.ctx.closePath();
+            // this.ctx.fillStyle = 'Maroon';
+            // this.ctx.fillRect(this.pos[0], this.pos[1]+this.height, this.width, 18);
 
-        this.ctx.lineWidth = 10;
-        this.ctx.strokeStyle = this.color;
-        this.ctx.stroke();
-
-        this.ctx.fillStyle = this.color;
-        this.ctx.fill();
     }
 
-    // animateFire() {
-    //     requestAnimationFrame(this.animateFire.bind(this));
-    //     this.draw();
-    //     if (this.b[1])
-    //     this.pos[0] += 5;
-    //     this.c[0] -= 5;
-    //     this.b[1] += 5;
-    //     this.colorIdx += 1;
-    // }
-
     showMiddlePos() {
-        let x = this.pos[0] + this.c[0]/2;
-        let y = this.pos[1] + this.b[1]/2;
+        let x = this.pos[0] + this.height/2;
+        let y = this.pos[1] + this.width/2;
         this.ctx.fillStyle = 'cyan';
-        this.ctx.fillRect(x, y, 10, 10)
+        this.ctx.fillRect(x, y, 10, 10);
     }
 
     middlePos() {
-        let x = this.pos[0] + this.c[0]/2;
-        let y = this.pos[1] + this.b[1]/2;
+        let x = this.pos[0] + this.width/2;
+        let y = this.pos[1] + this.height/2;
         return [x, y];
     }
 

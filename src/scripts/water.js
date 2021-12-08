@@ -2,7 +2,7 @@ function Water(options) {
     this.pos = options.pos;
     this.radius = options.radius;
     this.ctx = options.ctx;
-    this.color = 'cyan';
+    this.color = 'DarkSlateBlue';
 }
 
 

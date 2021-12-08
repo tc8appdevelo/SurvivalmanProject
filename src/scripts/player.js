@@ -80,8 +80,6 @@ class Player {
             this.updateFrame();
         
         this.ctx.drawImage(charImg, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
-
-   
     }
 
 

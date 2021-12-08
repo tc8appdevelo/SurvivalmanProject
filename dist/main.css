@@ -4,3 +4,7 @@
 html, body {
   overflow: hidden;
 }
+
+section {
+  display: flex;
+}

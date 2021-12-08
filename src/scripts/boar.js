@@ -6,25 +6,36 @@ class Boar {
         this.ctx = ctx;
         this.pos = [Math.floor(Math.random() * 555),
                     Math.floor(Math.random() * 555)];
-        this.width = 44;
-        this.height = 33;
-        this.color = 'Maroon';
+
+        this.image = new Image();
+        this.image.src = "../boar_left.png"
+        this.width = this.image.width;
+        this.height = this.image.height;
+        
 
         this.setMovement();
 
         this.moving = true;
+
+
         
         setInterval(this.setMovement.bind(this), this.timeMoving);
         //requestAnimationFrame(this.update.bind(this));
     }
 
-
-
     draw() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.pos[0], this.pos[1],
+        this.ctx.drawImage(this.image, 0, 0,
+            this.width, this.height, this.pos[0], this.pos[1],
             this.width, this.height);
+            // this.ctx.fillStyle = 'blue';
+            // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
     }
+
+    // draw() {
+    //     this.ctx.fillStyle = this.color;
+    //     this.ctx.fillRect(this.pos[0], this.pos[1],
+    //         this.width, this.height);
+    // }
 
     move(deltaTime) {
         if (this.timeMoving > 0) {

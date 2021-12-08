@@ -2,24 +2,36 @@ class GroundTile {
     constructor(ops) {
         this.ctx = ops.ctx;
         this.pos = ops.pos;
-        this.width = ops.width;
-        this.height = ops.height;
-        this.style = ops.style;
+        // this.width = ops.width;
+        // this.height = ops.height;
+        // this.style = ops.style;
         // this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
-        this.greens = [ 'MediumSpringGreen', 'SpringGreen'];
+        this.greens = [ 'DarkGreen', 'ForestGreen'];
         this.browns = ['SaddleBrown', 'Peru', 'Tan', 'NavajoWhite', 'BurlyWood', 'Olive', 'SandyBrown', 'DarkGoldenRod'];
         this.greys = ['DarkSlateGray', 'SlateGray', 'DimGray', 'Silver', 'DimGray'];
         this.blues = ['ConrflowerBlue', 'MediumBlue', 'LightSkyBlue', 'MidnightBlue', 'Navy'];
 
-        this.color = this.randomColor(this.style);
-        
-    }
+        //this.color = this.randomColor(this.style);
 
-    draw() {
-        
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+        this.fireImage = new Image();
+        this.fireImage.src = "../bg_dark.png";
+        this.width = this.fireImage.width;
+        this.height = this.fireImage.height;
+        console.log(this.height);
+        console.log(this.width);
     }
+    draw() {
+        this.ctx.drawImage(this.fireImage, 0, 0,
+            this.width, this.height, this.pos[0], this.pos[1],
+            this.width, this.height);
+            // this.ctx.fillStyle = 'blue';
+            // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    }
+    // draw() {
+        
+    //     this.ctx.fillStyle = this.color;
+    //     this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    // }
 
     randomColor(style) {
         let color = '';

@@ -8,7 +8,7 @@ class Food {
         
         let colors = ['red', 'orange', 'purple', 'yellow', 'blue'];
         let rand = Math.floor(Math.random() * colors.length);
-        this.color = colors[rand];
+        this.color = 'red';
     }
 
     draw() {
