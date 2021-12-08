@@ -3,17 +3,21 @@
 // allow player to put anything into the fire with different funny animations.
 
 class Fire {
-    constructor(aPos, bPos, cPos, ctx) {
-        this.a = aPos;
-        this.b = bPos;
-        this.c = cPos;
+    constructor(ctx, pos) {
         this.ctx = ctx;
+        this.pos = pos;
+        this.b = [40, -80];
+        this.c = [80, 0];
     }
     draw() {
+        let x = this.pos[0];
+        let y = this.pos[1];
+
         this.ctx.beginPath();
-        this.ctx.moveTo(this.a[0], this.a[1]);
-        this.ctx.lineTo(this.b[0], this.b[1]);
-        this.ctx.lineTo(this.c[0], this.c[1]);
+        
+        this.ctx.moveTo(this.pos[0], this.pos[1]);
+        this.ctx.lineTo(this.b[0]+x, this.b[1]+y);
+        this.ctx.lineTo(this.c[0]+x, this.c[1]+y);
         this.ctx.closePath();
 
         this.ctx.lineWidth = 10;
@@ -22,6 +26,19 @@ class Fire {
 
         this.ctx.fillStyle = 'OrangeRed';
         this.ctx.fill();
+    }
+
+    showMiddlePos() {
+        let x = this.pos[0] + this.c[0]/2;
+        let y = this.pos[1] + this.b[1]/2;
+        this.ctx.fillStyle = 'cyan';
+        this.ctx.fillRect(x, y, 10, 10)
+    }
+
+    middlePos() {
+        let x = this.pos[0] + this.c[0]/2;
+        let y = this.pos[1] + this.b[1]/2;
+        return [x, y];
     }
 
     

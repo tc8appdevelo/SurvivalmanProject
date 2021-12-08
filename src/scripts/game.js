@@ -5,7 +5,9 @@ const Water = require("./water.js");
 const Food = require("./food.js");
 const Spear = require("./spear.js");
 const Boar = require("./boar.js");
-const PorkChop = require("./pork_chop.js");
+const BoarMeat = require("./boar_meat");
+
+
 
 let clickedMoveNeeded = false;
 let spearThrowPressed = false;
@@ -20,16 +22,18 @@ class Game {
         this.canvas = document.querySelector('canvas');
         this.ctx = ctx;
 
+        this.fires = [];
         this.boars = [];
         this.waters = [];
         this.foods = [];
         this.wood = [];
         this.spears = [];
 
-        this.fire = new Fire([40,40], [30,20], [20,40], this.ctx);
-
-        document.addEventListener('keydown', keyDownHandler, false);
-        document.addEventListener('keyup', keyUpHandler, false);
+        let fire = new Fire(this.ctx, [0, 100]);
+        this.fires.push(fire);
+        console.log(this.fires);
+        document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
+        document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
         document.addEventListener('click', this.mouseDownHandler.bind(this), false);
     }
 
@@ -37,7 +41,7 @@ class Game {
         this.player = this.createPlayer(this, this.ctx);
         this.spear = this.createSpear([222, 222], this.ctx);
 
-        const water = new Water({ pos: [333, 111], radius: 55, ctx: this.ctx });
+        const water = new Water({ pos: [555, 111], radius: 55, ctx: this.ctx });
         this.lastUpdateTime = 0;
         this.waters.push(water);
         this.spawnFoods(5);
@@ -51,6 +55,9 @@ class Game {
     }
 
     drawGame() {
+        if (this.player.pos[0] > 500) {
+            
+        }
         this.ctx.clearRect(0, 0, 800, 800);
         for (let i = 0; i < this.waters.length; i++) {
             this.waters[i].createWater();
@@ -62,6 +69,9 @@ class Game {
             this.boars[i].draw();
 
         }
+        for (let i = 0; i < this.fires.length; i++) {
+            this.fires[i].draw();
+        }
 
         this.player.draw();
         if (this.player.holding.length > 0) {
@@ -69,7 +79,7 @@ class Game {
                 e.draw();
             });
         }
-        this.fire.draw();
+
         this.spear.draw();
     }
 
@@ -81,13 +91,7 @@ class Game {
     }
 
     createFood(pos) {
-        const food = new Food({
-            ctx: this.ctx,
-            pos: pos,
-            width: 16,
-            height: 16,
-            player: this.player
-        });
+        const food = new Food(this.ctx, pos);
         return food;
     }
 
@@ -175,19 +179,30 @@ class Game {
         let y = this.player.middlePosition()[1];
 
         for (let i = 0; i < this.boars.length; i++) {
-            console.log("boar ")
+
             let b = this.boars[i];
             let s = this.spear;
             let dist = Math.sqrt(Math.pow(s.pos[0]-b.pos[0], 2) + Math.pow(s.pos[1]-b.pos[1], 2));
-            console.log(`boar spear dist: ${dist}`);
             if (dist <= (b.width/2 + s.width/2)) {
                 let x = b.pos[0];
                 let y = b.pos[1];
                 let pos = [x,y];
-                console.log(`boars length: ${this.boars.length}`);
+
                 this.boars.splice(i, 1);
-                console.log(`boars length: ${this.boars.length}`);
+                let boarMeat = new BoarMeat(this.ctx, pos);
+                this.foods.push(boarMeat);
             }
+        }
+
+        for (let i = 0; i < this.fires.length; i++) {
+            let f = this.fires[i].middlePos();
+            let p = this.player.middlePosition();
+            let dist = Math.sqrt(Math.pow(f[0]-p[0], 2) + Math.pow(f[1]-p[1], 2));
+            if ((dist < this.player.width*2)) {
+                this.player.byFire = true;
+                console.log("by fire");
+            }
+            
         }
 
     }
@@ -231,6 +246,22 @@ class Game {
         let x = pos[0];
         let y = pos[1];
         let playerPos = this.player.middlePosition();
+        
+        for (let i = 0; i < this.fires.length; i++) {
+            console.log("in for loop fire");
+            //if (this.player.holding[0] instanceof BoarMeat) {
+                
+                let f = this.fires[i];
+                if ((x >= f.pos[0] && x <= f.pos[0] + f.c[0]) && (y <= f.pos[1] && y >= f.pos[1] + f.b[1])) {
+                    console.log("click on fire regestered");
+                    // drop item removes from this.foods array
+                    this.player.dropItem();
+                    //this.foods[0].moveTo(this.fires[i].middlePos());
+                    this.foods[this.foods.length - 1].cook();
+                }
+            //}
+        }
+
         for (let i = 0; i < this.foods.length; i++) {
             let food = this.foods[i];
             if (((x >= food.pos[0]) && x <= (food.pos[0] + food.width)) && 
@@ -244,6 +275,7 @@ class Game {
                 return food;
             }
         }
+
         if (((x >= this.spear.pos[0]) && x <= (this.spear.pos[0] + this.spear.width)) 
             && ((y >= this.spear.pos[1]) && y <= (this.spear.pos[1] + this.spear.height))) {
             const distance = Math.sqrt(Math.pow(this.spear.pos[0] - playerPos[0], 2) + 
@@ -255,47 +287,27 @@ class Game {
         }
         
     }
+    keyDownHandler(event) {
+        if (event.keyCode == 82) {
+            spearThrowPressed = true;
+        }
+        if (event.keyCode == 68) {
+            this.player.dropItem();
+        }
+    
+    }
+    keyUpHandler(event) {
+        if (event.keyCode == 82) {
+            spearThrowPressed = false;
+        }
+    }
 
 }
 
 
-function keyDownHandler(event) {
-    if (event.keyCode == 32) {
-        spearThrowPressed = true;
-    }
-    if (event.keyCode == 39) {
-        rightPressed = true;
-    }
-    else if(event.keyCode == 37) {
-        leftPressed = true;
-    }
 
-    if (event.keyCode == 40) {
-        downPressed = true;
-    }
-    else if(event.keyCode == 38) {
-        upPressed = true;
-    }
-}
 
-function keyUpHandler(event) {
-    if (event.keyCode == 32) {
-        spearThrowPressed = false;
-    }
-    if (event.keyCode == 39) {
-        rightPressed = false;
-    }
-    else if(event.keyCode == 37) {
-        leftPressed = false;
-    }
 
-    if (event.keyCode == 40) {
-        downPressed = false;
-    }
-    else if(event.keyCode == 38) {
-        upPressed = false;
-    }
-}
 
 
 module.exports = Game;

@@ -2,6 +2,7 @@ const Game = require("./game.js");
 const Spear = require("./spear.js");
 const Water = require("./water.js");
 const Food = require("./food.js");
+const BoarMeat = require("./boar_meat.js");
 
 // class Player 
 class Player {
@@ -24,6 +25,8 @@ class Player {
         this.isMoving = false;
         this.isDrinking = false;
         this.isDay = true;
+        this.byFire = false;
+        this.inShade = false;
 
         this.calories = 2000;
         this.hydration = 100;
@@ -33,7 +36,7 @@ class Player {
         
         setInterval(this.incrementHydration.bind(this), 2000);
         setInterval(this.incrementCalories.bind(this), 2000);
-        //setInterval(this.incrementBodyTemp.bind(this), 2000);
+        setInterval(this.incrementBodyTemp.bind(this), 2000);
         addEventListener('keydown', this.keyDownListener.bind(this));
         requestAnimationFrame(this.playerUpdate.bind(this));
     }
@@ -67,7 +70,7 @@ class Player {
 
     dropItem() {
         if (this.holding.length > 0) {
-            if (this.holding[0] instanceof Food) {
+            if (this.holding[0] instanceof BoarMeat || this.holding[0] instanceof Food) {
                 console.log("instanceof works");
                 this.game.foods.push(this.holding[0]);
             }
@@ -77,8 +80,11 @@ class Player {
 
 
     keyDownListener(event) {
-        if (event.keyCode == 69 && this.holding[0] instanceof Food) {
-            console.log("eating food");
+        if (event.keyCode == 69 && this.holding[0]instanceof BoarMeat) {
+            console.log("eating boar meat");
+            this.eatFood();
+        } else if (event.keyCode == 69 && this.holding[0] instanceof Food) {
+            console.log("eating food food");
             this.eatFood();
         }
     }
@@ -98,13 +104,23 @@ class Player {
     };
 
     incrementBodyTemp() {
-        if (isDay) {
-            this.bodyTemp += 5;
-            console.log(this.bodyTemp);
+        if (this.isDay) {
+            if (this.inShade) {
+                this.bodyTemp -= 10;
+                console.log(`in shade: ${this.bodyTemp}`)
+            } else {
+                this.bodyTemp += 5;
+            } 
         } else {
-            this.bodyTemp -= 5;
-            console.log(this.bodyTemp);
+            if (this.byFire) {
+                this.bodyTemp += 10;
+            }
+            else {
+                this.bodyTemp -= 5;
+                console.log(this.bodyTemp);
+            }
         }
+        this.tempText.innerHTML = `Body Temp: ${this.bodyTemp}`;
     }
 
     draw() {
@@ -133,10 +149,21 @@ class Player {
         let unitVectorX = moveX / magnitude;
         let unitVectorY = moveY / magnitude;
 
-        this.pos[0] += (this.vel[0] * deltaTime * 0.3) * unitVectorX;
-        this.pos[1] += (this.vel[1] * deltaTime * 0.3) * unitVectorY;
+        let xMove = (this.vel[0] * deltaTime * 0.3) * unitVectorX;
+        let yMove = (this.vel[1] * deltaTime * 0.3) * unitVectorY;
+
+        this.pos[0] += xMove;
+        this.pos[1] += yMove;
+
+        // this.pos[0] += (this.vel[0] * deltaTime * 0.3) * unitVectorX;
+        // this.pos[1] += (this.vel[1] * deltaTime * 0.3) * unitVectorY;
 
         this.isMoving = true;
+
+        // if (this.pos[0] > 500) {
+        //     this.game.waters[0].pos[0] -= xMove;
+        //     //this.game.waters[0].pos[1] += yMove;
+        // }
     }
     middlePosition() {
         let x = this.pos[0] + this.width / 2;

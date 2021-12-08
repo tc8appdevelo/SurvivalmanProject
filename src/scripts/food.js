@@ -1,9 +1,9 @@
 class Food {
-    constructor(options) {
-        this.pos = options.pos;
-        this.width = options.width;
-        this.height = options.height;
-        this.ctx = options.ctx;
+    constructor(ctx, pos) {
+        this.ctx = ctx;
+        this.pos = pos;
+        this.width = 16;
+        this.height = 16;
         this.calories = 100;
         
         let colors = ['red', 'orange', 'purple', 'yellow', 'blue'];

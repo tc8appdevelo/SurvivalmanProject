@@ -1,4 +1,4 @@
-const PorkChop = require("./pork_chop.js");
+
 
 class Boar {
     constructor(game, ctx) {
@@ -45,10 +45,6 @@ class Boar {
 
         this.timeMoving = ((Math.random() * 4) + 1) * 1000;
         this.speed = ((Math.random() * 6) + 1);
-
-        console.log("xRandom: " + xRandom);
-        console.log("yRandom: " + yRandom);
-        console.log(`Unit Vector: ${unitVector}`);
 
         this.unitVector = unitVector;
         return this.timeMoving;
