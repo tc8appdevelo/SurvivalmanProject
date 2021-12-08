@@ -27,10 +27,26 @@ class Player {
         this.isDay = true;
         this.byFire = false;
         this.inShade = false;
-
         this.calories = 2000;
         this.hydration = 100;
         this.bodyTemp = 100;
+        this.x = 0;
+        this.y = 0;
+        this.srcX = 0;
+        this.srcY = 0;
+        this.sheetWidth = 128;
+        this.sheetHeight = 128;
+        this.cols = 4;
+        this.rows = 4;
+
+        this.movingLeft = true;
+        this.characterImageLeft = new Image();
+        this.characterImageLeft.src = "../spritesheet_caveman_left.png"
+        this.characterImageRight = new Image();
+        this.characterImageRight.src = "../spritesheet_caveman_right.png"
+        
+        this.currentFrame = 0;
+        
 
         this.setUpHtmlTexts();
         
@@ -39,10 +55,44 @@ class Player {
         setInterval(this.incrementBodyTemp.bind(this), 2000);
         addEventListener('keydown', this.keyDownListener.bind(this));
         requestAnimationFrame(this.playerUpdate.bind(this));
+        
+        
+        console.log("hello")
     }
 
 
+    updateFrame() {
+        this.currentFrame = (this.currentFrame + 1) % this.cols;
+        this.srcX = this.currentFrame * this.width;
+        if (this.srcX === 96){
+            this.srcY += 32;
+        }
+        if (this.srcY > 96) {
+            this.srcY = 0;
+        }
 
+    }
+    
+    drawAnim() {
+        let charImg = this.movingLeft ? this.characterImageLeft : this.characterImageRight
+
+        if (this.isMoving)
+            this.updateFrame();
+        
+        this.ctx.drawImage(charImg, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+
+   
+    }
+
+
+    drawStationary() {
+        //this.updateFrame();
+        this.ctx.drawImage(this.characterImageLeft, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+    }
+    drawAnimRight() {
+        this.updateFrame();
+        this.ctx.drawImage(this.characterImageRight, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+    }
 
 
     playerUpdate() {
@@ -123,10 +173,10 @@ class Player {
         this.tempText.innerHTML = `Body Temp: ${this.bodyTemp}`;
     }
 
-    draw() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
-    }
+    // draw() {
+    //     this.ctx.fillStyle = this.color;
+    //     this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    // }
     move(deltaTime, dir) {
         this.pos[0] += this.vel[0] * (deltaTime * 0.2) * dir[0];
         this.pos[1] += this.vel[1] * (deltaTime * 0.2) * dir[1];
@@ -155,9 +205,12 @@ class Player {
         this.pos[0] += xMove;
         this.pos[1] += yMove;
 
-        // this.pos[0] += (this.vel[0] * deltaTime * 0.3) * unitVectorX;
-        // this.pos[1] += (this.vel[1] * deltaTime * 0.3) * unitVectorY;
 
+        if (xMove <= 0) {
+            this.movingLeft = true;
+        } else {
+            this.movingLeft = false;
+        }
         this.isMoving = true;
 
         // if (this.pos[0] > 500) {
@@ -165,6 +218,7 @@ class Player {
         //     //this.game.waters[0].pos[1] += yMove;
         // }
     }
+
     middlePosition() {
         let x = this.pos[0] + this.width / 2;
         let y = this.pos[1] + this.height / 2;

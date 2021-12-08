@@ -7,7 +7,7 @@ const Spear = require("./spear.js");
 const Boar = require("./boar.js");
 const BoarMeat = require("./boar_meat.js");
 const GroundTile = require("./ground_tile.js");
-
+const PlayerAnim = require("./player_anim.js");
 
 
 let clickedMoveNeeded = false;
@@ -30,7 +30,9 @@ class Game {
         this.wood = [];
         this.spears = [];
         this.groundTiles = [];
+        this.trees = [];
 
+        
         
 
         this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
@@ -40,7 +42,7 @@ class Game {
 
         let fire = new Fire(this.ctx, [200, 400]);
         this.fires.push(fire);
-        console.log(this.fires);
+
         document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
         document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
         document.addEventListener('click', this.mouseDownHandler.bind(this), false);
@@ -62,7 +64,11 @@ class Game {
 
         let boar = new Boar(this, this.ctx);
         this.boars.push(boar);
+
+        this.spawnTrees(3);
+
         this.drawGame();
+
 
         requestAnimationFrame(this.myUpdate.bind(this));
     }
@@ -84,7 +90,12 @@ class Game {
         for (let i = 0; i < this.fires.length; i++) {
             this.fires[i].draw();
         }
-        this.player.draw();
+
+        // for (let i = 0; i < this.trees.length; i++) {
+        //     this.trees[i].draw();
+        // }
+
+        //this.player.drawAnim();
         if (this.player.holding.length > 0) {
             this.player.holding.forEach(function(e) {
                 e.draw();
@@ -94,7 +105,13 @@ class Game {
             this.foods[i].draw();
         }
 
+
         this.spear.draw();
+
+       
+   
+        this.player.drawAnim();
+        
     }
 
     layGroundTiles(x, y) {
@@ -111,24 +128,22 @@ class Game {
                 });
                 gt.draw();
                 this.groundTiles.push(gt);
-                console.log(gt)
                 x += 44;
             }
             y += 44;
         }   
-        for (let i = 0; i < 100; i++) {
-            let gt = new GroundTile({
-                ctx: this.ctx,
-                pos: [x,y],
-                width: 44,
-                height: 44,
-                style: 'green'
-            });
-            gt.draw();
-            this.groundTiles.push(gt);
-            console.log(gt)
-            x += 44;
-        }
+        // for (let i = 0; i < 100; i++) {
+        //     let gt = new GroundTile({
+        //         ctx: this.ctx,
+        //         pos: [x,y],
+        //         width: 44,
+        //         height: 44,
+        //         style: 'green'
+        //     });
+        //     gt.draw();
+        //     this.groundTiles.push(gt);
+        //     x += 44;
+        // }
 
         
         // can change height of each row later and try to get more randomization
@@ -177,6 +192,7 @@ class Game {
         return food;
     }
 
+
     spawnFoods(num) {
         for(let i = 0; i < num; i++) {
             let x = Math.floor(Math.random() * 555);
@@ -186,6 +202,33 @@ class Game {
             let food = this.createFood(pos);
             this.foods.push(food);
         }
+    }
+
+    spawnTrees(num) {
+        for(let i = 0; i < num; i++) {
+
+            let tree = this.createTree();
+            this.trees.push(tree);
+        }
+    }
+
+    createTree() {
+        let x = Math.floor(Math.random() * 555);
+        let y = Math.floor(Math.random() * 555);
+        let pos = [x, y];
+        let radius = Math.floor(Math.random() * 88 + 33)
+        // let width = Math.floor(Math.random() * (radius-(radius/2)) + (radius/2));
+        let width = radius/2;
+        let height = Math.floor(Math.random() * (340) + 64);
+        const tree = new Tree({
+            ctx: this.ctx,
+            pos: pos,
+            radius: radius,
+            width: width,
+            height: height
+        });
+
+        return tree;
     }
 
     createSpear(pos, ctx) {
@@ -207,8 +250,8 @@ class Game {
             ctx: ctx,
             pos: [44, 44],
             vel: [44, 44],
-            width: 44,
-            height: 44,
+            width: 32,
+            height: 32,
             color: '#404040'
         });
         return player;

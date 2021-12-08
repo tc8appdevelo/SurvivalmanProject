@@ -4,6 +4,8 @@ const Boar = require("./scripts/boar.js");
 const Spear = require("./scripts/spear.js");
 const Water = require("./scripts/water.js");
 const Fire = require("./scripts/fire.js");
+const Tree = require("./scripts/tree.js");
+
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOM loaded");
