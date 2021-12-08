@@ -5,7 +5,8 @@ const Water = require("./water.js");
 const Food = require("./food.js");
 const Spear = require("./spear.js");
 const Boar = require("./boar.js");
-const BoarMeat = require("./boar_meat");
+const BoarMeat = require("./boar_meat.js");
+const GroundTile = require("./ground_tile.js");
 
 
 
@@ -28,6 +29,12 @@ class Game {
         this.foods = [];
         this.wood = [];
         this.spears = [];
+        this.groundTiles = [];
+
+        this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
+        this.browns = ['SaddleBrown', 'Peru', 'Tan', 'NavajoWhite', 'BurlyWood', 'Olive', 'SandyBrown', 'DarkGoldenRod'];
+        this.greys = ['DarkSlateGray', 'SlateGray', 'DimGray', 'Silver', 'DimGray'];
+        this.blues = ['ConrflowerBlue', 'MediumBlue', 'LightSkyBlue', 'MidnightBlue', 'Navy'];
 
         let fire = new Fire(this.ctx, [0, 100]);
         this.fires.push(fire);
@@ -38,50 +45,123 @@ class Game {
     }
 
     start() {
+
+
         this.player = this.createPlayer(this, this.ctx);
         this.spear = this.createSpear([222, 222], this.ctx);
 
         const water = new Water({ pos: [555, 111], radius: 55, ctx: this.ctx });
         this.lastUpdateTime = 0;
+
         this.waters.push(water);
+        this.layGroundTiles(0,0);
         this.spawnFoods(5);
         //this.spawnBoars();
+
         let boar = new Boar(this, this.ctx);
         this.boars.push(boar);
-        console.log(this.boars);
         this.drawGame();
 
         requestAnimationFrame(this.myUpdate.bind(this));
     }
 
     drawGame() {
-        if (this.player.pos[0] > 500) {
-            
-        }
+
         this.ctx.clearRect(0, 0, 800, 800);
+
+        for (let i = 0; i < this.groundTiles.length; i++) {
+            this.groundTiles[i].draw();
+        }
         for (let i = 0; i < this.waters.length; i++) {
             this.waters[i].createWater();
         }
-        for (let i = 0; i < this.foods.length; i++) {
-            this.foods[i].draw();
-        }
+
         for (let i = 0; i < this.boars.length; i++) {
             this.boars[i].draw();
-
         }
         for (let i = 0; i < this.fires.length; i++) {
             this.fires[i].draw();
         }
-
         this.player.draw();
         if (this.player.holding.length > 0) {
             this.player.holding.forEach(function(e) {
                 e.draw();
             });
         }
+        for (let i = 0; i < this.foods.length; i++) {
+            this.foods[i].draw();
+        }
 
         this.spear.draw();
     }
+
+    layGroundTiles(x, y) {
+        for (let i = 0; i < 22; i++) {
+            x = 0;
+            for (let i = 0; i < 22; i++) {
+
+                let gt = new GroundTile({
+                    ctx: this.ctx,
+                    pos: [x,y],
+                    width: 22,
+                    height: 22,
+                    style: 'green'
+                });
+                gt.draw();
+                this.groundTiles.push(gt);
+                console.log(gt)
+                x += 22;
+            }
+            y += 22;
+        }   
+        for (let i = 0; i < 22; i++) {
+            let gt = new GroundTile({
+                ctx: this.ctx,
+                pos: [x,y],
+                width: 22,
+                height: 22,
+                style: 'green'
+            });
+            gt.draw();
+            this.groundTiles.push(gt);
+            console.log(gt)
+            x += 22;
+        }
+
+        
+        // can change height of each row later and try to get more randomization
+        // without gaps between them.
+        
+
+        // let i = 0;
+        // while (i < size[1]) {
+        //     let height = Math.floor(Math.random()*88 + 22);
+
+        //     let j = 0;
+        //     while (j < size[0]) {
+        //         let width = Math.floor(Math.random()*88 + 22);
+
+        //         let groundTile = new GroundTile({ctx: this.ctx, pos: pos, width: width, height: height, type: 'green'});
+        //         console.log(groundTile);
+        //         this.groundTiles.push(groundTile);
+                
+        //         j++;
+        //     }
+        //     pos[1] += height;
+        //     i++;
+        // }
+    }
+
+    // createGroundTile(ops) {
+    //     let pos = ops.pos;
+    //     let width = ops.width;
+    //     let height = ops.height;
+    //     let type = ops.type;
+    //     let tile = new Tile({ops})
+    //     this.groundTiles.push(tile);
+    //     tile.draw;
+    //     return tile;
+    // }
 
     spawnBoars() {
         setInterval(() => {
