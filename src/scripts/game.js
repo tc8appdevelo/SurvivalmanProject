@@ -31,12 +31,14 @@ class Game {
         this.spears = [];
         this.groundTiles = [];
 
+        
+
         this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
         this.browns = ['SaddleBrown', 'Peru', 'Tan', 'NavajoWhite', 'BurlyWood', 'Olive', 'SandyBrown', 'DarkGoldenRod'];
         this.greys = ['DarkSlateGray', 'SlateGray', 'DimGray', 'Silver', 'DimGray'];
         this.blues = ['ConrflowerBlue', 'MediumBlue', 'LightSkyBlue', 'MidnightBlue', 'Navy'];
 
-        let fire = new Fire(this.ctx, [0, 100]);
+        let fire = new Fire(this.ctx, [200, 400]);
         this.fires.push(fire);
         console.log(this.fires);
         document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
@@ -96,36 +98,36 @@ class Game {
     }
 
     layGroundTiles(x, y) {
-        for (let i = 0; i < 22; i++) {
+        for (let i = 0; i < 33; i++) {
             x = 0;
-            for (let i = 0; i < 22; i++) {
+            for (let i = 0; i < 33; i++) {
 
                 let gt = new GroundTile({
                     ctx: this.ctx,
                     pos: [x,y],
-                    width: 22,
-                    height: 22,
+                    width: 44,
+                    height: 44,
                     style: 'green'
                 });
                 gt.draw();
                 this.groundTiles.push(gt);
                 console.log(gt)
-                x += 22;
+                x += 44;
             }
-            y += 22;
+            y += 44;
         }   
-        for (let i = 0; i < 22; i++) {
+        for (let i = 0; i < 100; i++) {
             let gt = new GroundTile({
                 ctx: this.ctx,
                 pos: [x,y],
-                width: 22,
-                height: 22,
+                width: 44,
+                height: 44,
                 style: 'green'
             });
             gt.draw();
             this.groundTiles.push(gt);
             console.log(gt)
-            x += 22;
+            x += 44;
         }
 
         

@@ -44,7 +44,12 @@ class Boar {
         let unitVector = [xNormalize, yNormalize];
 
         this.timeMoving = ((Math.random() * 4) + 1) * 1000;
-        this.speed = ((Math.random() * 6) + 1);
+        let speed = Math.floor((Math.random() * 6) + 1);
+        if (speed % 2 === 0) {
+            this.speed = speed * -1;
+        } else {
+            this.speed = speed;
+        }
 
         this.unitVector = unitVector;
         return this.timeMoving;

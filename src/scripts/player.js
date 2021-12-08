@@ -13,7 +13,7 @@ class Player {
         this.vel = options.vel;
         this.width = options.width;
         this.height = options.height;
-        this.color = options.color;
+        this.color = '#484848';
         this.holdingPosition = [this.pos[0] - 22, (this.pos[1] + this.height/2)];
 
         this.clickedOn = [];

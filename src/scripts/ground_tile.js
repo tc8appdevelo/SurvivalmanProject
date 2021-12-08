@@ -6,12 +6,12 @@ class GroundTile {
         this.height = ops.height;
         this.style = ops.style;
         // this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
-        this.greens = ['SpringGreen', 'LawnGreen', 'SeaGreen', 'MediumAquaMarine'];
+        this.greens = [ 'MediumSpringGreen', 'SpringGreen'];
         this.browns = ['SaddleBrown', 'Peru', 'Tan', 'NavajoWhite', 'BurlyWood', 'Olive', 'SandyBrown', 'DarkGoldenRod'];
         this.greys = ['DarkSlateGray', 'SlateGray', 'DimGray', 'Silver', 'DimGray'];
         this.blues = ['ConrflowerBlue', 'MediumBlue', 'LightSkyBlue', 'MidnightBlue', 'Navy'];
 
-        this.color = this.randomColor('green');
+        this.color = this.randomColor(this.style);
         
     }
 
