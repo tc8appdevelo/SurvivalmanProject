@@ -4,6 +4,57 @@
 
  Survivalman starts the player off in the wilderness with only a campfire and a spear. They need food, shelter, and water to keep themselves alive. Dehydration hits first, closely followed by hypothermia or heat exposure. Food is the most difficult thing to find, but you live longer without it than the other necessities. There will be nothing but your sense of direction to get you back to the warmth of your fire. There is no map, you can only see what is on the screen; when you wander in search of food and water, you have to remember how to get back.
 
+The player needs food, water, and fire to survive.
+
+The food, water, and fire meters tick down 
+as the game goes on.
+
+When one of these meters runs out, or if temp gets
+to high, the game is over.
+
+The player moves with mouse clicks.
+
+Players can pick up food and a rock or spear
+to use to hunt boars.
+
+If the player is holding food, they can press
+the "E" key to eat it and it adds a certain
+amount of calories depending on what type it is.
+
+If the player kills a boar they can cook the meat
+on the fire by holding it and clicking on the fire.
+When they click on the fire it starts cooking and
+after a few seconds changes color to indicate 
+that it is cooked.
+
+If the player is standing close enough to water,
+they automatically rehydrate and the hydration
+meter goes up.
+
+Throw spear/rock is available when holding that
+item by pressing the "R" key and 
+
+If the rock or spear hits a wild boar sprite,
+the boar dissapears and boar meat is dropped.
+
+The player sprite has a run animation when
+it is moving.
+
+The run animation stops when the player stops
+moving.
+
+The run animation changes from left to right
+depending on the x value of their movement
+vector.
+
+The spear or rock goes through the air when
+the player throws it pressing the "R" key
+and clicking with the mouse.
+
+The boar meat changes color/appearance when
+you click on the fire while holding it and
+leave it there for a few seconds.
+
 ## Functionality & MVPs
 
 In Survivalman, users will perpetually be in search of water, shelter, and food.
@@ -23,10 +74,8 @@ In Survivalman, users will perpetually be in search of water, shelter, and food.
 
 ## Wireframes:
 
-
- 
-* On the left will be navigation links to main menu, user profile, and controls/how to play
-* In the bottom left corner a button to turn sound on or off
+* On the left will be navigation links to controls/how to play
+* Counters displayed in text of calories, hydration and temperature.
 * On the right a timer to show how long you have survived this game
 * Top middle title
 
@@ -55,5 +104,28 @@ In Survivalman, users will perpetually be in search of water, shelter, and food.
  Check if everything is working as expected and put it on GitHub.
 
 ## Bonus Features:
+
+The world could extend beyond the visible screen, 
+and when the player gets a certain distance from
+the edge of the canvas element, the world adjusts
+and you can keep exploring the area without
+changing the size of the window/canvas.
+
+There could be a day/night cycle where in the day,
+the player needs shade so that they dont overheat
+and get a game over.  At nigth the player would
+need to periodically be near a fire to warm up
+or the hypothermia meter would cause a game over.
+
+At night visiblilty could be limited with a fading
+to black effect to make navigation harder.
+
+If the game usually lasted more than a minute or
+two, the season could change each minute and bring
+new challenges to survival.
+
+There could be a car somewhere on the level that
+the player was trying to find to win.
+
  Multiplayer where the goal would be to outlast an opponent would be a ton of fun. If it was vs mode it would be like a big game of hide and seek. Without a map, you wont know where you are in relation to each other.
 

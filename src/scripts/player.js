@@ -25,7 +25,7 @@ class Player {
 
         this.isMoving = false;
         this.isDrinking = false;
-        this.isDay = true;
+        this.isDay = false;
         this.byFire = false;
         this.inShade = false;
         this.calories = 2000;
@@ -50,12 +50,24 @@ class Player {
 
 
         this.setUpHtmlTexts();
+
         
-        setInterval(this.incrementHydration.bind(this), 2000);
-        setInterval(this.incrementCalories.bind(this), 2000);
-        setInterval(this.incrementBodyTemp.bind(this), 2000);
-        addEventListener('keydown', this.keyDownListener.bind(this));
-        requestAnimationFrame(this.playerUpdate.bind(this));
+        
+        
+        this.hydrationInterval = setInterval(this.incrementHydration.bind(this), 2000);
+        this.caloriesInterval = setInterval(this.incrementCalories.bind(this), 2000);
+        this.tempInterval = setInterval(this.incrementBodyTemp.bind(this), 2000);
+        this.keyd = addEventListener('keydown', this.keyDownListener.bind(this));
+        this.animframe = requestAnimationFrame(this.playerUpdate.bind(this));
+    }
+
+    clearIntervalsForPlayer() {
+        clearInterval(this.hydrationInterval);
+        clearInterval(this.caloriesInterval);
+        clearInterval(this.tempInterval);
+        removeEventListener('keydown', this.keyd);
+        cancelAnimationFrame(this.animframe);
+        removeEventListener('keydown', this.game.keyDownListener);
     }
 
 
@@ -151,6 +163,7 @@ class Player {
 
 
     gameOver() {
+        this.clearIntervalsForPlayer();
         this.game.gameOver = true;
     }
 
@@ -158,6 +171,7 @@ class Player {
         this.calories -= 100;
         this.caloriesText.innerHTML = `Calories: ${this.calories}`;
         if (this.calories <= 0) {
+            this.clearIntervalsForPlayer();
             this.gameOver();
         }
     };
@@ -166,13 +180,17 @@ class Player {
         if (this.isDay) {
             if (this.inShade) {
                 this.bodyTemp -= 5;
-                console.log(`in shade: ${this.bodyTemp}`)
+                
             } else {
                 this.bodyTemp += 5;
             } 
         } else {
             if (this.byFire) {
+                console.log(this.byFire)
                 this.bodyTemp += 10;
+                if (this.bodyTemp > 100) {
+                    this.bodyTemp = 100;
+                }
             }
             else {
                 this.bodyTemp -= 5;
@@ -252,7 +270,7 @@ class Player {
         this.setUpHtmlTexts();
         this.holding.shift();
         this.game.drawGame();
-        console.log(this.holding);
+        
     }
 
     collisionDetection() {

@@ -6,28 +6,38 @@ class BoarMeat {
         this.pos = pos;
         this.isCooked = false;
         this.calories = 1000;
-        this.width = 44;
-        this.height = 22;
-        this.color = "Coral";
-        // this.uncookedImage = new Image();
-        // this.image = document.getElementById("boarmeat");
-        // this.width = this.image.width;
-        // this.height = this.image.height;
+        // this.width = 44;
+        // this.height = 22;
+        //this.color = "Coral";
+        
+        this.uncooked = document.getElementById("boarmeat");
+        this.cooked = document.getElementById("boarMeatGrilled");
+        this.width = this.uncooked.width;
+        this.height = this.uncooked.height;
        
     }
 
-    // draw() {
-    //     this.ctx.drawImage(this.uncookedImage, 0, 0,
-    //         this.width, this.height, this.pos[0], this.pos[1],
-    //         this.width, this.height);
-    //         // this.ctx.fillStyle = 'blue';
-    //         // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
-    // }
+
 
     draw() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+
+            if (!this.isCooked) {
+                this.ctx.drawImage(this.uncooked, 0, 0,
+                    this.width, this.height, this.pos[0], this.pos[1],
+                    this.width, this.height);
+            } else {
+                this.ctx.drawImage(this.cooked, 0, 0,
+                    this.width, this.height, this.pos[0], this.pos[1],
+                    this.width, this.height);
+            }
+            // this.ctx.fillStyle = 'blue';
+            // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
     }
+
+    // draw() {
+    //     this.ctx.fillStyle = this.color;
+    //     this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    // }
 
     cook() { 
         console.log("cook ran") 

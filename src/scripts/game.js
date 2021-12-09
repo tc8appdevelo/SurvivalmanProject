@@ -49,7 +49,12 @@ class Game {
         this.clickListener = document.addEventListener('click', this.mouseDownHandler.bind(this), false);
 
         this.layGroundTiles(0,0);
+
+        if (this.player) {
+            this.player.clearIntervalsForPlayer();
+        }
         this.player = this.createPlayer(this, this.ctx);
+
         this.spear = this.createSpear([222, 222], this.ctx);
 
         const water = new Water({ pos: [555, 111], radius: 55, ctx: this.ctx });
@@ -274,6 +279,8 @@ class Game {
             let dist = Math.sqrt(Math.pow(f[0]-p[0], 2) + Math.pow(f[1]-p[1], 2));
             if ((dist < this.player.width*2)) {
                 this.player.byFire = true;
+            } else {
+                this.player.byFire = false;
             }
             
         }
