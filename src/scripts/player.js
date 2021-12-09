@@ -131,7 +131,7 @@ class Player {
     dropItem() {
         if (this.holding.length > 0) {
             if (this.holding[0] instanceof BoarMeat || this.holding[0] instanceof Food) {
-                console.log("instanceof works");
+                
                 this.game.foods.push(this.holding[0]);
             }
         }
@@ -141,10 +141,10 @@ class Player {
 
     keyDownListener(event) {
         if (event.keyCode == 69 && this.holding[0]instanceof BoarMeat) {
-            console.log("eating boar meat");
+            
             this.eatFood();
         } else if (event.keyCode == 69 && this.holding[0] instanceof Food) {
-            console.log("eating food food");
+            
             this.eatFood();
         }
     }
@@ -186,7 +186,6 @@ class Player {
             } 
         } else {
             if (this.byFire) {
-                console.log(this.byFire)
                 this.bodyTemp += 10;
                 if (this.bodyTemp > 100) {
                     this.bodyTemp = 100;
@@ -194,7 +193,7 @@ class Player {
             }
             else {
                 this.bodyTemp -= 5;
-                console.log(this.bodyTemp);
+                
             }
         }
         this.tempText.innerHTML = `Body Temp: ${this.bodyTemp}`;

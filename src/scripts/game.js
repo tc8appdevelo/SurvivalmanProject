@@ -312,7 +312,6 @@ class Game {
 
         this.checkClickedOn(pos);
         if (this.player.clickedOn != -1) {
-            console.log(this.player.distanceFrom(this.player.clickedOn));
             this.player.distanceFrom(this.player.clickedOn);
         }
 
