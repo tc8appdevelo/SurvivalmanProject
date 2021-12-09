@@ -1,4 +1,4 @@
-const Game = require("./scripts/game.js")
+const Game = require("./scripts/game.js");
 const Player = require("./scripts/player.js");
 const Boar = require("./scripts/boar.js");
 const Spear = require("./scripts/spear.js");
@@ -10,11 +10,15 @@ const BoarMeat = require("./scripts/boar_meat.js");
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log("DOM loaded");
-
+    
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
+    let game = new Game(ctx, canvas);
+    let btn = document.getElementById("restart");
 
-    const game = new Game(ctx);
-    game.start();
+    btn.addEventListener('click', () =>{
+        
+        game.start();
+    });
 });

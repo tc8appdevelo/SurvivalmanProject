@@ -8,7 +8,7 @@ class Boar {
                     Math.floor(Math.random() * 555)];
 
         this.image = new Image();
-        this.image.src = "../boar_left.png"
+        this.image.src = "../src/images/boar_left.png"
         this.width = this.image.width;
         this.height = this.image.height;
         
@@ -29,6 +29,12 @@ class Boar {
             this.width, this.height);
             // this.ctx.fillStyle = 'blue';
             // this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
+    }
+
+    middle() {
+        let x = this.pos[0] + this.width/2;
+        let y = this.pos[1] + this.height/2;
+        return [x, y];
     }
 
     // draw() {

@@ -7,9 +7,10 @@ const BoarMeat = require("./boar_meat.js");
 // class Player 
 class Player {
     constructor(options) {
+        console.log(this);
         this.game = options.game;
         this.ctx = options.ctx;
-        this.pos = options.pos;
+        this.pos = [222,222];
         this.vel = options.vel;
         this.width = options.width;
         this.height = options.height;
@@ -41,12 +42,12 @@ class Player {
 
         this.movingLeft = true;
         this.characterImageLeft = new Image();
-        this.characterImageLeft.src = "../spritesheet_caveman_left.png"
+        this.characterImageLeft.src = "../src/images/spritesheet_caveman_left.png"
         this.characterImageRight = new Image();
-        this.characterImageRight.src = "../spritesheet_caveman_right.png"
+        this.characterImageRight.src = "../src/images/spritesheet_caveman_right.png"
         
         this.currentFrame = 0;
-        
+
 
         this.setUpHtmlTexts();
         
@@ -55,9 +56,6 @@ class Player {
         setInterval(this.incrementBodyTemp.bind(this), 2000);
         addEventListener('keydown', this.keyDownListener.bind(this));
         requestAnimationFrame(this.playerUpdate.bind(this));
-        
-        
-        console.log("hello")
     }
 
 
@@ -79,17 +77,20 @@ class Player {
         if (this.isMoving)
             this.updateFrame();
         
-        this.ctx.drawImage(charImg, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+        this.ctx.drawImage(charImg, this.srcX, this.srcY, 
+            this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
     }
 
 
     drawStationary() {
-        //this.updateFrame();
-        this.ctx.drawImage(this.characterImageLeft, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+        this.ctx.drawImage(this.characterImageLeft, this.srcX, 
+            this.srcY, this.width, this.height, this.pos[0], 
+            this.pos[1], this.width, this.height);
     }
     drawAnimRight() {
         this.updateFrame();
-        this.ctx.drawImage(this.characterImageRight, this.srcX, this.srcY, this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
+        this.ctx.drawImage(this.characterImageRight, this.srcX, this.srcY, 
+            this.width, this.height, this.pos[0], this.pos[1], this.width, this.height);
     }
 
 
@@ -99,7 +100,6 @@ class Player {
     }
 
     playerHolding() {
-        //console.log(this.holding);
         if (this.holding.length > 0) {
             let h = this.holding[0];
             let dist = Math.hypot(this.pos[0] - h.pos[0], this.pos[1] - h.pos[1]);
@@ -144,17 +144,28 @@ class Player {
             this.hydration += 10;
         }
         this.hydrationText.innerHTML = `Hydration: ${this.hydration}`;
+        if (this.hydration <= 0) {
+            this.gameOver();
+        }
     };
+
+
+    gameOver() {
+        this.game.gameOver = true;
+    }
 
     incrementCalories() {
         this.calories -= 100;
         this.caloriesText.innerHTML = `Calories: ${this.calories}`;
+        if (this.calories <= 0) {
+            this.gameOver();
+        }
     };
 
     incrementBodyTemp() {
         if (this.isDay) {
             if (this.inShade) {
-                this.bodyTemp -= 10;
+                this.bodyTemp -= 5;
                 console.log(`in shade: ${this.bodyTemp}`)
             } else {
                 this.bodyTemp += 5;
@@ -169,12 +180,12 @@ class Player {
             }
         }
         this.tempText.innerHTML = `Body Temp: ${this.bodyTemp}`;
+
+        if (this.bodyTemp <= 0 || this.bodyTemp >= 200) {
+            this.gameOver();
+        }
     }
 
-    // draw() {
-    //     this.ctx.fillStyle = this.color;
-    //     this.ctx.fillRect(this.pos[0], this.pos[1], this.width, this.height);
-    // }
     move(deltaTime, dir) {
         this.pos[0] += this.vel[0] * (deltaTime * 0.2) * dir[0];
         this.pos[1] += this.vel[1] * (deltaTime * 0.2) * dir[1];
@@ -202,6 +213,8 @@ class Player {
 
         this.pos[0] += xMove;
         this.pos[1] += yMove;
+
+        
 
 
         if (xMove <= 0) {
@@ -241,24 +254,6 @@ class Player {
         this.game.drawGame();
         console.log(this.holding);
     }
-
-
-    // I think if its a circle colliding you just have to
-    // check if adding the radius or subtracting it from its pos
-    // will result in a point that touches the square.
-    // probably some way to detect a range easier than writing
-    // a bunch more if statements.
-    // collisionFromPoint(pos) {
-    //     let isCollision = false;
-    //     let x = pos[0];
-    //     let y = pos[1];
-
-    //     if ((x >= this.x && x <= this.x + this.width)
-    //         && (y >= this.y && y <= this.y + this.height)) {
-    //         isCollision = true;
-    //     }
-    //     return isCollision;
-    // }
 
     collisionDetection() {
         let x = this.middlePosition()[0];

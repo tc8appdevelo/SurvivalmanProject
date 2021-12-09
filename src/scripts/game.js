@@ -7,22 +7,29 @@ const Spear = require("./spear.js");
 const Boar = require("./boar.js");
 const BoarMeat = require("./boar_meat.js");
 const GroundTile = require("./ground_tile.js");
-const PlayerAnim = require("./player_anim.js");
-
+const HitBox = require("./hit_box.js");
 
 let clickedMoveNeeded = false;
 let spearThrowPressed = false;
-let isPlayerHolding;
 let spearClickMoveNeeded = false;
 let newPosition = [0,0];
 let newSpearPosition = [0,0];
+let isPlayerHolding;
 
 class Game {
-    
-    constructor(ctx) {
 
-        this.canvas = document.querySelector('canvas');
+    constructor(ctx, canvas) {
+        this.canvas = canvas
         this.ctx = ctx;
+    }
+
+    start() {
+        this.restart();
+    }
+
+    restart() {
+
+        this.gameOver = false;
 
         this.fires = [];
         this.boars = [];
@@ -33,25 +40,15 @@ class Game {
         this.groundTiles = [];
         this.trees = [];
 
-        
-        
-
-        this.greens = ['SpringGreen', 'LawnGreen', 'MediumAquaMarine','DarkGreen', 'ForestGreen', 'SeaGreen'];
-        this.browns = ['SaddleBrown', 'Peru', 'Tan', 'NavajoWhite', 'BurlyWood', 'Olive', 'SandyBrown', 'DarkGoldenRod'];
-        this.greys = ['DarkSlateGray', 'SlateGray', 'DimGray', 'Silver', 'DimGray'];
-        this.blues = ['ConrflowerBlue', 'MediumBlue', 'LightSkyBlue', 'MidnightBlue', 'Navy'];
-
         let fire = new Fire(this.ctx, [200, 400]);
         this.fires.push(fire);
 
-        document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
-        document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
-        document.addEventListener('click', this.mouseDownHandler.bind(this), false);
-    }
 
-    start() {
+        this.keydownListener = document.addEventListener('keydown', this.keyDownHandler.bind(this), false);
+        this.keyupListener = document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
+        this.clickListener = document.addEventListener('click', this.mouseDownHandler.bind(this), false);
 
-
+        this.layGroundTiles(0,0);
         this.player = this.createPlayer(this, this.ctx);
         this.spear = this.createSpear([222, 222], this.ctx);
 
@@ -59,13 +56,11 @@ class Game {
         this.lastUpdateTime = 0;
 
         this.waters.push(water);
-        this.layGroundTiles(0,0);
+        
         this.spawnFoods(5);
         //this.spawnBoars();
 
-        this.groundTile = new GroundTile({ctx: this.ctx,
-                            pos: [0,0]});
-        this.groundTiles.push(this.groundTile);
+        
 
         let boar = new Boar(this, this.ctx);
         this.boars.push(boar);
@@ -81,6 +76,8 @@ class Game {
     drawGame() {
 
         this.ctx.clearRect(0, 0, 800, 800);
+
+        
 
         for (let i = 0; i < this.groundTiles.length; i++) {
             this.groundTiles[i].draw();
@@ -100,7 +97,7 @@ class Game {
             this.trees[i].draw();
         }
 
-        //this.player.drawAnim();
+
         if (this.player.holding.length > 0) {
             this.player.holding.forEach(function(e) {
                 e.draw();
@@ -111,77 +108,34 @@ class Game {
         }
         this.spear.draw();
         this.player.drawAnim();
+
     }
 
+
+
     layGroundTiles(x, y) {
-        for (let i = 0; i < 22; i++) {
+        for (let i = 0; i < 6; i++) {
             x = 0;
             
-            for (let i = 0; i < 22; i++) {
+            for (let i = 0; i < 6; i++) {
 
                 let gt = new GroundTile({
                     ctx: this.ctx,
                     pos: [x,y],
                 });
-                gt.draw();
+                
                 this.groundTiles.push(gt);
                 x += 99;
             }
             y += 99;
         }   
-        // for (let i = 0; i < 100; i++) {
-        //     let gt = new GroundTile({
-        //         ctx: this.ctx,
-        //         pos: [x,y],
-        //         width: 44,
-        //         height: 44,
-        //         style: 'green'
-        //     });
-        //     gt.draw();
-        //     this.groundTiles.push(gt);
-        //     x += 44;
-        // }
-
-        
-        // can change height of each row later and try to get more randomization
-        // without gaps between them.
-        
-
-        // let i = 0;
-        // while (i < size[1]) {
-        //     let height = Math.floor(Math.random()*88 + 22);
-
-        //     let j = 0;
-        //     while (j < size[0]) {
-        //         let width = Math.floor(Math.random()*88 + 22);
-
-        //         let groundTile = new GroundTile({ctx: this.ctx, pos: pos, width: width, height: height, type: 'green'});
-        //         console.log(groundTile);
-        //         this.groundTiles.push(groundTile);
-                
-        //         j++;
-        //     }
-        //     pos[1] += height;
-        //     i++;
-        // }
     }
-
-    // createGroundTile(ops) {
-    //     let pos = ops.pos;
-    //     let width = ops.width;
-    //     let height = ops.height;
-    //     let type = ops.type;
-    //     let tile = new Tile({ops})
-    //     this.groundTiles.push(tile);
-    //     tile.draw;
-    //     return tile;
-    // }
 
     spawnBoars() {
         setInterval(() => {
             let boar = new Boar(this, this.ctx);
             this.boars.push(boar);
-        }, 3000);
+        }, 10000);
     }
 
     createFood(pos) {
@@ -213,10 +167,6 @@ class Game {
         let x = Math.floor(Math.random() * 555);
         let y = Math.floor(Math.random() * 555);
         let pos = [x, y];
-        // let radius = Math.floor(Math.random() * 88 + 33)
-        // // let width = Math.floor(Math.random() * (radius-(radius/2)) + (radius/2));
-        // let width = radius/2;
-        // let height = Math.floor(Math.random() * (340) + 64);
         const tree = new Tree({
             ctx: this.ctx,
             pos: pos
@@ -252,8 +202,11 @@ class Game {
     }
 
     myUpdate(time) {
+
         const deltaTime = (time - this.lastUpdateTime) / 100;
         this.lastUpdateTime = time;
+
+
 
         for (let i = 0; i < this.boars.length; i++) {
             this.boars[i].move(deltaTime);
@@ -285,10 +238,10 @@ class Game {
 
         this.drawGame();
 
-        if (time < 100000) {
-            requestAnimationFrame(this.myUpdate.bind(this));
+        let animationID = requestAnimationFrame(this.myUpdate.bind(this));
+        if (this.gameOver) {
+            cancelAnimationFrame(animationID);
         }
-        //requestAnimationFrame(this.myUpdate.bind(this));
     }
 
 
@@ -299,17 +252,18 @@ class Game {
 
         for (let i = 0; i < this.boars.length; i++) {
 
-            let b = this.boars[i];
+            let b = this.boars[i].middle();
+            let boar = this.boars[i];
             let s = this.spear;
-            let dist = Math.sqrt(Math.pow(s.pos[0]-b.pos[0], 2) + Math.pow(s.pos[1]-b.pos[1], 2));
-            if (dist <= (b.width/2 + s.width/2)) {
-                let x = b.pos[0];
-                let y = b.pos[1];
+            
+            let dist = Math.sqrt(Math.pow(s.pos[0]-b[0], 2) + Math.pow(s.pos[1]-b[1], 2));
+            if (dist <= (boar.width/2 + s.width/2)) {
+                let x = b[0];
+                let y = b[1];
                 let pos = [x,y];
 
                 this.boars.splice(i, 1);
                 let boarMeat = new BoarMeat(this.ctx, pos);
-                console.log(boarMeat);
                 this.foods.push(boarMeat);
             }
         }
@@ -320,7 +274,6 @@ class Game {
             let dist = Math.sqrt(Math.pow(f[0]-p[0], 2) + Math.pow(f[1]-p[1], 2));
             if ((dist < this.player.width*2)) {
                 this.player.byFire = true;
-                console.log("by fire");
             }
             
         }
@@ -343,7 +296,12 @@ class Game {
         let canvasBounds = canvas.getBoundingClientRect();
         let clickX = event.pageX - canvasBounds.left;
         let clickY = event.pageY - canvasBounds.top;
+        console.log(clickX);
+
         let pos = [clickX, clickY];
+        if (clickX < 0) {
+            return;
+        }
 
         this.checkClickedOn(pos);
         if (this.player.clickedOn != -1) {
@@ -356,7 +314,7 @@ class Game {
             newPosition = [clickX, clickY];
         } else if (this.player.holding[0] === this.spear){
             this.player.holding.shift();
-            isPlayerHolding = false;
+            
             spearClickMoveNeeded = true;
             newSpearPosition = [clickX, clickY];
         }
@@ -368,7 +326,6 @@ class Game {
         let playerPos = this.player.middlePosition();
         
         for (let i = 0; i < this.fires.length; i++) {
-            console.log("in for loop fire");
             if (this.player.holding[0] instanceof BoarMeat) {
                 
                 let f = this.fires[i];
@@ -376,7 +333,6 @@ class Game {
                 console.log("x " + x);
                 console.log("y " + y);
                 if ((x >= f.pos[0] && x <= f.pos[0] + f.width) && (y >= f.pos[1] && y <= f.pos[1] + f.height)) {
-                    console.log("click on fire regestered");
                     // drop item removes from this.foods array
                     this.player.dropItem();
                     //this.foods[0].moveTo(this.fires[i].middlePos());

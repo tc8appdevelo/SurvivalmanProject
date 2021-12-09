@@ -7,7 +7,7 @@ class Fire {
         this.ctx = ctx;
         this.pos = pos;
         this.fireImage = new Image();
-        this.fireImage.src = "../Fire.png";
+        this.fireImage.src = "../src/images/Fire.png";
         this.width = this.fireImage.width;
         this.height = this.fireImage.height;
     }

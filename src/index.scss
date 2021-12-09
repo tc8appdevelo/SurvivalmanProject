@@ -1,8 +1,88 @@
-html, body {
-    overflow: hidden;
+@import './reset.css';
+
+
+body {
+    background-color: darkslategray;
 }
 
-section {
-    display: flex;
+html, body {
+    overflow: hidden;
+
+}
+
+// .canvas-wrapper {
+//     position:relative
+// }
+
+// .canvas-wrapper:after {
+//     content:'';
+//     position:absolute;
+//     z-index:999;
+//     top:0;
+//     left:0;
+//     width:100%;
+//     height:100%;
+//     cursor: not-allowed;    
+//     pointer-events: none
+// }
+canvas {
+    display: block;
+    background-color: white;
+    position: absolute;
+    border: 2px solid;
+    margin: auto;
+    left: 60px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+#container {
+    position: relative;
+}
+
+#container canvas, #hud, #above {
+    position: absolute;
+    user-select: none;
     
+}
+
+#infoDiv {
+    color: white;
+}
+
+p {
+    color:white;
+}
+
+
+
+#buttons {
+    position: relative;
+    top: 200px;
+    left: 50%;
+    width: 100px;
+
+    color:white;
+    text-align: center;
+    margin: auto;
+}
+button {
+    position: relative;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+    background: transparent;
+    font-size: 33px;
+    color: white;
+    ;
+}
+#title {
+    display: block;
+    font-size: 44px;
+    color: white;
+}
+#info {
+    width: 200px;
+    color: white;
 }
