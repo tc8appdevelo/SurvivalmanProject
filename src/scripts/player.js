@@ -41,10 +41,10 @@ class Player {
         this.rows = 4;
 
         this.movingLeft = true;
-        this.characterImageLeft = new Image();
-        this.characterImageLeft.src = "../src/images/spritesheet_caveman_left.png"
-        this.characterImageRight = new Image();
-        this.characterImageRight.src = "../src/images/spritesheet_caveman_right.png"
+        
+        this.characterImageLeft = document.getElementById("caveman_left");
+        
+        this.characterImageRight = document.getElementById("caveman_right");
         
         this.currentFrame = 0;
 

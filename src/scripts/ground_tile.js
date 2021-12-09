@@ -13,8 +13,8 @@ class GroundTile {
 
         //this.color = this.randomColor(this.style);
 
-        this.bgImage = new Image();
-        this.bgImage.src = "../src/images/bg_dark.png";
+        
+        this.bgImage = document.getElementById("bg_dark");
         this.width = this.bgImage.width;
         this.height = this.bgImage.height;
     }

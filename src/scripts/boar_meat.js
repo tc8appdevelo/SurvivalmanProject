@@ -10,7 +10,7 @@ class BoarMeat {
         this.height = 22;
         this.color = "Coral";
         // this.uncookedImage = new Image();
-        // this.image.src = '../src/images/boarmeat.png';
+        // this.image = document.getElementById("boarmeat");
         // this.width = this.image.width;
         // this.height = this.image.height;
        

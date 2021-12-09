@@ -7,8 +7,8 @@ class Boar {
         this.pos = [Math.floor(Math.random() * 555),
                     Math.floor(Math.random() * 555)];
 
-        this.image = new Image();
-        this.image.src = "../src/images/boar_left.png"
+        
+        this.image = document.getElementById("boar_left")
         this.width = this.image.width;
         this.height = this.image.height;
         

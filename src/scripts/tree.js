@@ -4,8 +4,8 @@ class Tree {
         this.pos = ops.pos;
         this.topColor = 'Green';
         this.trunkColor = 'Brown';
-        this.treeImage = new Image();
-        this.treeImage.src = "../src/images/tree.png"
+        
+        this.treeImage = document.getElementById("tree")
         this.width = this.treeImage.width;
         this.height = this.treeImage.height;
 

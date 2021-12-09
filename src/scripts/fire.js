@@ -6,10 +6,11 @@ class Fire {
     constructor(ctx, pos) {
         this.ctx = ctx;
         this.pos = pos;
-        this.fireImage = new Image();
-        this.fireImage.src = "./src/images/Fire.png";
+        
+        this.fireImage = document.getElementById("fire");
         this.width = this.fireImage.width;
         this.height = this.fireImage.height;
+        
     }
     draw() {
         this.ctx.drawImage(this.fireImage, 0, 0,

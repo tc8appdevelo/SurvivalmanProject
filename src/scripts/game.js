@@ -296,7 +296,7 @@ class Game {
         let canvasBounds = canvas.getBoundingClientRect();
         let clickX = event.pageX - canvasBounds.left;
         let clickY = event.pageY - canvasBounds.top;
-        console.log(clickX);
+        
 
         let pos = [clickX, clickY];
         if (clickX < 0) {
