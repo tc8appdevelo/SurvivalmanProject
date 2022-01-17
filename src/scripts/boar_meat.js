@@ -6,9 +6,7 @@ class BoarMeat {
         this.pos = pos;
         this.isCooked = false;
         this.calories = 1000;
-        // this.width = 44;
-        // this.height = 22;
-        //this.color = "Coral";
+
         
         this.uncooked = document.getElementById("boarmeat");
         this.cooked = document.getElementById("boarMeatGrilled");
