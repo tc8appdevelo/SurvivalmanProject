@@ -1,6 +1,6 @@
-const Game = require("./game.js");
-const Spear = require("./spear.js");
-const Water = require("./water.js");
+// const Game = require("./game.js");
+// const Spear = require("./spear.js");
+// const Water = require("./water.js");
 const Food = require("./food.js");
 const BoarMeat = require("./boar_meat.js");
 
@@ -241,11 +241,22 @@ class Player {
         }
         this.isMoving = true;
 
+        if (this.pos[0] > 500) {
+            this.game.moveGameWorld([xMove, 0])
+            console.log(this.pos);
+        }
+        
+
         // if (this.pos[0] > 500) {
         //     this.game.waters[0].pos[0] -= xMove;
         //     //this.game.waters[0].pos[1] += yMove;
         // }
+
+        // for(let i = 0; i < this.game.trees.length; i++) {
+        //     this.game.trees[i].pos[0] -= xMove;
+        // }
     }
+
 
     middlePosition() {
         let x = this.pos[0] + this.width / 2;

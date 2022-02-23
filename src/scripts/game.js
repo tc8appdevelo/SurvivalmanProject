@@ -372,6 +372,16 @@ class Game {
         }
         
     }
+
+
+    moveGameWorld(pos) {
+        for (let i = 0; i < this.trees.length; i++) {
+            this.trees[i].pos[0] -= pos[0];
+        }
+
+    }
+
+
     keyDownHandler(event) {
         if (event.keyCode == 82) {
             spearThrowPressed = true;
@@ -386,6 +396,8 @@ class Game {
             spearThrowPressed = false;
         }
     }
+
+
 
 }
 
