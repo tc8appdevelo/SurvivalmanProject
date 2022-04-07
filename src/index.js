@@ -1,11 +1,5 @@
 const Game = require("./scripts/game.js");
-const Player = require("./scripts/player.js");
-const Boar = require("./scripts/boar.js");
-const Spear = require("./scripts/spear.js");
-const Water = require("./scripts/water.js");
-const Fire = require("./scripts/fire.js");
-const Tree = require("./scripts/tree.js");
-const BoarMeat = require("./scripts/boar_meat.js");
+const TestGame = require("./scripts/new/test_game.js");
 
 
 window.addEventListener('DOMContentLoaded', (event) => {
@@ -15,9 +9,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const ctx = canvas.getContext('2d');
 
     this.game = new Game(ctx, canvas);
+    this.TestGame = new TestGame(ctx, canvas);
+
     let btn = document.getElementById("restart");
-    console.log("hehehehehehkejlaf;dlaks")
-    btn.addEventListener('click', () =>{
+    btn.addEventListener('click', () => {
         this.game.start();
     });
+
+    let testBtn = document.getElementById("restartTest")
+    testBtn.addEventListener('click', () => {
+        this.TestGame.start();
+    })
 });

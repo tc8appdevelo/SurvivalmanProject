@@ -40,3 +40,5 @@ class TransitionRight extends State {
   }
 
 }
+
+module.exports = TransitionRight
