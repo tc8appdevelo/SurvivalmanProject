@@ -50,8 +50,6 @@ class Player {
 
 
         this.setUpHtmlTexts();
-        // testing git logged in
-        
         
         
         this.hydrationInterval = setInterval(this.incrementHydration.bind(this), 2000);
