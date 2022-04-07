@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     this.game = new Game(ctx, canvas);
     let btn = document.getElementById("restart");
-
+    console.log("hehehehehehkejlaf;dlaks")
     btn.addEventListener('click', () =>{
         this.game.start();
     });

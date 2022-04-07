@@ -21,6 +21,7 @@ class Game {
     constructor(ctx, canvas) {
         this.canvas = canvas
         this.ctx = ctx;
+        this.groundColor = '#e4cda7';
     }
 
     start() {
@@ -48,7 +49,7 @@ class Game {
         this.keyupListener = document.addEventListener('keyup', this.keyUpHandler.bind(this), false);
         this.clickListener = document.addEventListener('click', this.mouseDownHandler.bind(this), false);
 
-        this.layGroundTiles(0,0);
+        // this.layGroundTiles(0,0);
 
         if (this.player) {
             this.player.clearIntervalsForPlayer();
@@ -62,8 +63,8 @@ class Game {
 
         this.waters.push(water);
         
-        this.spawnFoods(5);
-        //this.spawnBoars();
+        //this.spawnFoods(5);
+        this.spawnBoars();
 
         
 
@@ -82,6 +83,7 @@ class Game {
 
         this.ctx.clearRect(0, 0, 800, 800);
 
+        this.drawGround();
         
 
         for (let i = 0; i < this.groundTiles.length; i++) {
@@ -116,7 +118,12 @@ class Game {
 
     }
 
-
+    drawGround() {
+        this.ctx.fillStyle = this.groundColor;
+        this.ctx.fillRect(0, 0, 800, 800);
+        this.ctx.fillStyle = "green";
+        this.ctx.fillRect(800, 800, 800, 800);
+    }
 
     layGroundTiles(x, y) {
         for (let i = 0; i < 6; i++) {
@@ -149,16 +156,16 @@ class Game {
     }
 
 
-    spawnFoods(num) {
-        for(let i = 0; i < num; i++) {
-            let x = Math.floor(Math.random() * 555);
-            let y = Math.floor(Math.random() * 555);
+    // spawnFoods(num) {
+    //     for(let i = 0; i < num; i++) {
+    //         let x = Math.floor(Math.random() * 555);
+    //         let y = Math.floor(Math.random() * 555);
 
-            let pos = [x, y];
-            let food = this.createFood(pos);
-            this.foods.push(food);
-        }
-    }
+    //         let pos = [x, y];
+    //         let food = this.createFood(pos);
+    //         this.foods.push(food);
+    //     }
+    // }
 
     spawnTrees(num) {
         for(let i = 0; i < num; i++) {
@@ -370,6 +377,13 @@ class Game {
                 
             }
         }
+        
+        if (x > 700) {
+            this.transitionRight();
+        }
+    }
+
+    transitionRight() {
         
     }
 

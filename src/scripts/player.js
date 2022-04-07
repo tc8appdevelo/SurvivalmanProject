@@ -3,6 +3,7 @@
 // const Water = require("./water.js");
 const Food = require("./food.js");
 const BoarMeat = require("./boar_meat.js");
+// import { TransitionRight } from './new/state.js';
 
 // class Player 
 class Player {
@@ -15,6 +16,9 @@ class Player {
         this.width = options.width;
         this.height = options.height;
         this.color = '#484848';
+        // this.states = [new Playing(), new TransitionRight()]
+        // this.currentState = this.states[0];
+        
         this.holdingPosition = [this.pos[0] - 22, (this.pos[1] + this.height/2)];
 
         this.clickedOn = [];
@@ -59,6 +63,11 @@ class Player {
         this.tempInterval = setInterval(this.incrementBodyTemp.bind(this), 2000);
         this.keyd = addEventListener('keydown', this.keyDownListener.bind(this));
         this.animframe = requestAnimationFrame(this.playerUpdate.bind(this));
+    }
+
+    setState(state) {
+        this.currentState = this.states[state];
+        this.currentState.enter();
     }
 
     clearIntervalsForPlayer() {
@@ -241,10 +250,10 @@ class Player {
         }
         this.isMoving = true;
 
-        if (this.pos[0] > 500) {
-            this.game.moveGameWorld([xMove, 0])
-            console.log(this.pos);
-        }
+        // if (this.pos[0] > 500) {
+        //     this.game.moveGameWorld([xMove, 0])
+        //     console.log(this.pos);
+        // }
         
 
         // if (this.pos[0] > 500) {
