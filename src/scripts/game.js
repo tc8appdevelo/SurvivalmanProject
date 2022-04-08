@@ -1,13 +1,22 @@
-const Player = require("./player.js");
-const Fire = require("./fire.js");
-const Tree = require("./tree.js");
-const Water = require("./water.js");
-const Food = require("./food.js");
-const Spear = require("./spear.js");
-const Boar = require("./boar.js");
-const BoarMeat = require("./boar_meat.js");
-const GroundTile = require("./ground_tile.js");
-const HitBox = require("./hit_box.js");
+// const Player = require("./player.js");
+// const Fire = require("./fire.js");
+// const Tree = require("./tree.js");
+// const Water = require("./water.js");
+// const Food = require("./food.js");
+// const Spear = require("./spear.js");
+// const Boar = require("./boar.js");
+// const BoarMeat = require("./boar_meat.js");
+// const GroundTile = require("./ground_tile.js");
+// const HitBox = require("./hit_box.js");
+import Player from './player.js';
+import Fire from './fire.js';
+import Tree from './tree.js';
+import Water from './water.js';
+import Food from './food.js';
+import Spear from './spear.js';
+import Boar from './boar.js';
+import BoarMeat from './boar_meat.js';
+import GroundTile from './ground_tile.js';
 
 let clickedMoveNeeded = false;
 let spearThrowPressed = false;
@@ -421,5 +430,5 @@ class Game {
 
 
 
-module.exports = Game;
+export default Game;
 

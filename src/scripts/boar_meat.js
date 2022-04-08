@@ -48,4 +48,4 @@ class BoarMeat {
     }
 }
 
-module.exports = BoarMeat;
+export default BoarMeat;

@@ -15,4 +15,4 @@ class HitBox {
     
 }
 
-module.exports = HitBox;
+export default HitBox;

@@ -75,4 +75,4 @@ class Boar {
 
 }
 
-module.exports = Boar;
+export default Boar;

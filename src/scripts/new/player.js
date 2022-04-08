@@ -1,4 +1,4 @@
-import { StationaryLeft, StationaryRight } from "./state";
+import { StationaryLeft, StationaryRight } from "./state.js";
 
 class Player {
   constructor(gameWidth, gameHeight) {

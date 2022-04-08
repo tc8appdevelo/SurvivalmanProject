@@ -69,4 +69,4 @@ class Spear {
 
 
 
-module.exports = Spear;
+export default Spear;

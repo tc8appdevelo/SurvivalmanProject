@@ -55,4 +55,4 @@ class GroundTile {
     // }
 }
 
-module.exports = GroundTile;
+export default GroundTile;

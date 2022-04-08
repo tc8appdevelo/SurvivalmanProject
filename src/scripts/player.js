@@ -1,8 +1,8 @@
 // const Game = require("./game.js");
 // const Spear = require("./spear.js");
 // const Water = require("./water.js");
-const Food = require("./food.js");
-const BoarMeat = require("./boar_meat.js");
+import Food from "./food.js";
+import BoarMeat from "./boar_meat.js";
 // import { TransitionRight } from './new/state.js';
 
 // class Player 
@@ -310,4 +310,4 @@ class Player {
 
 }
 
-module.exports = Player;
+export default Player;

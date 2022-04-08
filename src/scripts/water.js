@@ -22,7 +22,7 @@ class Water {
 
 
 
-module.exports = Water;
+export default Water;
 
 
 

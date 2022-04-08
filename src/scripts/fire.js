@@ -41,4 +41,4 @@ class Fire {
 
 
 
-module.exports = Fire;
+export default Fire;
