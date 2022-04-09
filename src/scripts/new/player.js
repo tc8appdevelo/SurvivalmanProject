@@ -27,7 +27,7 @@ class Player {
       this.width, this.height,
       this.pos[0], this.pos[1],
       this.width, this.height);
-    ctx.fillStyle = "salmon"
+    ctx.fillStyle = "gray"
     ctx.fillRect(222, 222, 32, 32);
   }
 }
